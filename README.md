@@ -340,14 +340,22 @@ queue.offer(page);
 After completing the lab, answer these questions:
 
 1. **Belady's Anomaly**: In Test Case 2, why does adding a 4th frame cause MORE page faults than having only 3 frames? This seems counterintuitive.
+Belady’s Anomaly happens because FIFO removes the oldest page without checking if it is still needed. When you add a 4th frame, the order of page removals changes in a bad way, which actually causes more page faults instead of fewer.
 
 2. **Data Structures**: Why do we need both a Queue AND a Set? What would happen if we only used a Queue?
+We use a queue to know which page is the oldest and should be removed and then a set to quickly check if a page is already in memory. If we only used a queue checking for page hits would be much slower because we'd have to search through the whole queue every time.
 
 3. **Performance**: If memory access takes 200 nanoseconds and a page fault takes 8 milliseconds, calculate the effective access time for Test Case 1 with 3 frames. (Use the formula from the lesson)
 
+The page fault rate for Test case 1 with 3 frames is 75% and using the formula gives an effective access time of around 6 ms. This happens because page faults are much slower than normal memory access so they dominate the total time.
+
 4. **Pattern Analysis**: Which test case had the worst performance with 3 frames? Why did that particular access pattern cause so many page faults?
 
+Test Case 3 had the worst performance because the pattern kept looping through four different pages while only having three frames. This caused almost every access to be a page fault since one page was always missing.
+
 5. **Real World**: Based on your observations, why do you think modern operating systems don't use pure FIFO for page replacement?
+
+Modern operating systems don’t use pure FIFO because it does not take into account how often or how recently a page is used. As a result it can remove important pages and cause many unnecessary page faults which in turn makes it slow and inefficient.
 
 ## What You're Learning
 
